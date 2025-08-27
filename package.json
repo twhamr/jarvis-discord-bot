@@ -1,0 +1,24 @@
+{
+  "name": "jarvis-discord",
+  "version": "1.0.0",
+  "description": "Discord Bot named Jarvis, developed using discord.js",
+  "keywords": [
+    "Discord",
+    "NodeJS",
+    "Bot"
+  ],
+  "license": "MIT",
+  "author": "twhamr",
+  "type": "commonjs",
+  "main": "src/bot.js",
+  "scripts": {
+    "start": "node src/bot.js",
+    "test": "nodemon --ignore 'src/data/*'"
+  },
+  "dependencies": {
+    "discord.js": "^14.22.1",
+    "dotenv": "^17.2.1",
+    "ms": "^2.1.3",
+    "pretty-ms": "^9.2.0"
+  }
+}

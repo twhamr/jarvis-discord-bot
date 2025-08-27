@@ -1,0 +1,22 @@
+{
+  "title": "ROLE SELECTION",
+  "description": "React to this message to receive the respective role:",
+  "color": 37375,
+  "fields": [
+    {
+      "name": "📢 NOTIFICATIONS",
+      "value": "🔔 | *announcements*\n\n📩 | *game events*\n\n🌱 | *grow a garden stock*\n========================================",
+      "inline": false
+    },
+    {
+      "name": "🎮 GAMES",
+      "value": "🔷 | *roblox*\n\n⛏️ | *minecraft*\n\n⚽ | *rocket league*\n\n🏔️ | *peak*\n\n☠️ | *lethal company*\n========================================",
+      "inline": false
+    },
+    {
+      "name": "❓ MISC",
+      "value": "👨 | *male*\n\n👩 | *female*\n========================================",
+      "inline": false
+    }
+  ]
+}

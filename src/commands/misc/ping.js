@@ -15,6 +15,6 @@ module.exports = {
      * @param {Interaction} interaction 
      */
     callback: async (client, interaction) => {
-        return await interaction.reply(`Pong! ${client.ws.ping}ms`);
+        await interaction.reply(`Pong! ${client.ws.ping}ms`);
     }
 };

@@ -22,6 +22,6 @@ module.exports = {
         const { channel } = interaction;
 
         await channel.send({ embeds: [embed] });
-        return await interaction.reply({ content: 'Successfully created roles message.', flags: MessageFlags.Ephemeral });
+        await interaction.reply({ content: 'Successfully created roles message.', flags: MessageFlags.Ephemeral });
     }
 };

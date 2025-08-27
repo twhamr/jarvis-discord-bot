@@ -76,13 +76,18 @@ module.exports = {
                 emoji: emoji
             });
 
+            async function sendMessage(message) {
+                const embed = new EmbedBuilder()
+                .setColor('Blurple')
+                .setDescription(message);
+
+                await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+            }
+
             switch (sub) {
                 case 'add':
                     if (data) {
-                        return await interaction.reply({
-                            content: `It looks like you already have this reaction setup using ${emoji} on this message.`,
-                            flags: MessageFlags.Ephemeral
-                        });
+                        await sendMessage(`⚠️ It looks like you already have this reaction setup using ${emoji} on this message.`);
                     } else {
                         const role = options.getRole('role');
                         createRecord(cacheFile, {
@@ -92,23 +97,14 @@ module.exports = {
                             role: role.id
                         });
 
-                        const embed = new EmbedBuilder()
-                        .setDescription(`🫡 I have added a reaction role to ${message.url} with ${emoji} and the role ${role}.`)
-                        .setColor('Blurple');
-
                         await message.react(emoji);
 
-                        return await interaction.reply({
-                            embeds: [embed],
-                            flags: MessageFlags.Ephemeral
-                        });
+                        await sendMessage(`🫡 I have added a reaction role to ${message.url} with ${emoji} and the role ${role}.`);
                     }
+                break;
                 case 'remove':
                     if (!data) {
-                        return await interaction.reply({
-                            content: `It doesn't look like that reaction role exists with ${emoji}.`,
-                            flags: MessageFlags.Ephemeral
-                        });
+                        await sendMessage(`⚠️ It doesn't look like that reaction role exists with ${emoji}.`);
                     } else {
                         const users = await message.reactions.cache.get(emoji).users.fetch();
                         
@@ -123,21 +119,12 @@ module.exports = {
 
                         deleteRecord(cacheFile, data.id);
 
-                        const embed = new EmbedBuilder()
-                        .setDescription(`🫡 I have removed the reaction role from ${message.url} with ${emoji}.`)
-                        .setColor('Blurple');
-
-                        return await interaction.reply({
-                            embeds: [embed],
-                            flags: MessageFlags.Ephemeral
-                        });
+                        await sendMessage(`🫡 I have removed the reaction role from ${message.url} with ${emoji}.`);
                     }
+                break;
             }
         } catch (error) {
-            return await interaction.reply({
-                content: `❌ Unable to manage reaction roles: ${error}`,
-                flags: MessageFlags.Ephemeral
-            });
+            await sendMessage(`❌ Unable to manage reaction roles: ${error}`);
         }
     }
 }

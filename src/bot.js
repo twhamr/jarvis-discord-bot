@@ -18,6 +18,12 @@ const client = new Client({
     ]
 });
 
+if (process.env.DEV_ONLY) {
+    console.log('⚙️ Development mode is active.. Only refreshing commands for DEV server!');
+} else {
+    console.log('🚀 Development mode is inactive.. Commands are available globally!');
+}
+
 eventHandler(client);
 
 client.login(process.env.BOT_TOKEN);

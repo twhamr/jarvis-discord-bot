@@ -18,7 +18,7 @@ const client = new Client({
     ]
 });
 
-if (process.env.DEV_ONLY) {
+if (process.env.DEV_ONLY.toLowerCase() === 'true') {
     console.log('⚙️ Development mode is active.. Only refreshing commands for DEV server!');
 } else {
     console.log('🚀 Development mode is inactive.. Commands are available globally!');

@@ -22,7 +22,7 @@ function directoryExist(dir = '') {
 const dataDir = directoryExist();
 
 function readData(filename, dir = '') {
-    const filePath = dir? path.join(dir, filename): dataDir;
+    const filePath = dir? path.join(dir, filename): path.join(dataDir, filename);
 
     try {
         const data = fs.readFileSync(filePath);
@@ -34,7 +34,7 @@ function readData(filename, dir = '') {
 }
 
 function writeData(filename, data, dir = '') {
-    const filePath = dir? path.join(dir, filename): dataDir;
+    const filePath = dir? path.join(dir, filename): path.join(dataDir, filename);
 
     try {
         fs.writeFileSync(filePath, JSON.stringify(data, null, 2));

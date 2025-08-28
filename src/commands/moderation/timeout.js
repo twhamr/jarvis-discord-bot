@@ -1,39 +1,28 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const ms = require('ms');
 
 module.exports = {
-    name: 'timeout',
-    description: 'Timeout a user.',
-    options: [
-        {
-            name: 'target-user',
-            description: 'The user you want to timeout.',
-            type: ApplicationCommandOptionType.Mentionable,
-            required: true
-        },
-        {
-            name: 'duration',
-            description: 'Timeout duration (30m, 1h, 1 day).',
-            type: ApplicationCommandOptionType.String,
-            required: true
-        },
-        {
-            name: 'reason',
-            description: 'The reason for the timeout.',
-            type: ApplicationCommandOptionType.String
-        }
-    ],
-    // choices: Function,
-    // rolesRequired: Array[],
-    permissionsRequired: [PermissionFlagsBits.MuteMembers],
-    botPermissions: [PermissionFlagsBits.MuteMembers],
+    data: new SlashCommandBuilder()
+    .setName('timeout')
+    .setDescription('Timeout a user.')
+    .addMentionableOption(
+        (option) => option.setName('target-user').setDescription('The user you want to timeout.').setRequired(true)
+    )
+    .addStringOption(
+        (option) => option.setName('duration').setDescription('Timeout duration (30m, 1h, 1 day)').setRequired(true)
+    )
+    .addStringOption(
+        (option) => option.setName('reason').setDescription('The reason for the timeout.')
+    ),
     
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Interaction} interaction 
-     */
-    callback: async (client, interaction) => {
+    options: {
+        // devOnly: true,
+        userPermissions: ['MuteMembers'],
+        botPermissions: ['MuteMembers'],
+        deleted: false
+    },
+
+    run: async ({ interaction, client, handler }) => {
         const { options, guild } = interaction;
 
         const targetUserId = options.get('target-user').value;

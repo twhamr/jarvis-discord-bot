@@ -1,6 +1,6 @@
 const { ActivityType } = require('discord.js');
 
-module.exports = (client, args) => {
+module.exports = (c, client, handler) => {
     try {
         let status = [
             {
@@ -23,8 +23,10 @@ module.exports = (client, args) => {
 
         setInterval(() => {
             let random = Math.floor(Math.random() * status.length);
-            client.user.setActivity(status[random]);
+            c.user.setActivity(status[random]);
         }, 10000);
+
+        return true;
     } catch (error) {
         console.error(`❌ Unable to set Bot status: ${error}`);
     }

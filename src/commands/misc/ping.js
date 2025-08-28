@@ -1,20 +1,18 @@
-const { Client, Interaction } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-    name: 'ping',
-    description: 'Pong!',
-    // options: Object[],
-    // choices: Function,
-    // rolesRequired: Array[],
-    // permissionsRequired: Array[],
-    // botPermissions: Array[],
-    
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Interaction} interaction 
-     */
-    callback: async (client, interaction) => {
+    data: new SlashCommandBuilder()
+    .setName('ping')
+    .setDescription('Pong!'),
+
+    options: {
+        // devOnly: true,
+        // userPermissions: [],
+        // botPermissions: [],
+        deleted: false
+    },
+
+    run: async ({ interaction, client, handler }) => {
         await interaction.reply(`Pong! ${client.ws.ping}ms`);
     }
 };

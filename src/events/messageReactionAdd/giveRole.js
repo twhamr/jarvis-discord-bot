@@ -1,8 +1,6 @@
 const { fetchRecord } = require('../../handlers/cacheHandler');
 
-module.exports = async (client, args) => {
-    let [reaction, user] = args;
-    
+module.exports = async (reaction, user, details, client, handler) => {
     if (reaction.partial) {
         await reaction.fetch();
     }

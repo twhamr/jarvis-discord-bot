@@ -1,54 +1,38 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ChannelType, MessageFlags } = require('discord.js');
 const { fetchRecord, createRecord, deleteRecord } = require('../../handlers/cacheHandler');
 
 module.exports = {
-    name: 'message-logger',
-    description: 'Manage your message logger system.',
-    options: [
-        {
-            name: 'add',
-            description: 'Add a message logger channel.',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-                {
-                    name: 'channel',
-                    description: 'The channel to log messages from.',
-                    type: ApplicationCommandOptionType.Channel,
-                    required: true
-                },
-                {
-                    name: 'log-channel',
-                    description: 'The channel to log messages to.',
-                    type: ApplicationCommandOptionType.Channel,
-                    required: true
-                }
-            ]
-        },
-        {
-            name: 'remove',
-            description: 'Remove a message logger channel.',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-                {
-                    name: 'channel',
-                    description: 'The channel to log messages from.',
-                    type: ApplicationCommandOptionType.Channel,
-                    required: true
-                }
-            ]
-        }
-    ],
-    // choices: Function,
-    // rolesRequired: Array[],
-    permissionsRequired: [PermissionFlagsBits.Administrator],
-    botPermissions: [PermissionFlagsBits.Administrator],
+    data: new SlashCommandBuilder()
+    .setName('message-logger')
+    .setDescription('Manage your message logger system.')
+    .addSubcommand(
+        (command) => command
+                     .setName('add')
+                     .setDescription('Add a message logger channel.')
+                     .addChannelOption(
+                        (option) => option.setName('channel').setDescription('The channel to log messages from.').addChannelTypes(ChannelType.GuildText).setRequired(true)
+                     )
+                     .addChannelOption(
+                        (option) => option.setName('log-channel').setDescription('The channel to log messages to.').addChannelTypes(ChannelType.GuildText).setRequired(true)
+                     )
+    )
+    .addSubcommand(
+        (command) => command
+                     .setName('remove')
+                     .setDescription('Remove a message logger channel.')
+                     .addChannelOption(
+                        (option) => option.setName('channel').setDescription('The channel to log messages from.').addChannelTypes(ChannelType.GuildText).setRequired(true)
+                     )
+    ),
     
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Interaction} interaction 
-     */
-    callback: async (client, interaction) => {
+    options: {
+        // devOnly: true,
+        userPermissions: ['Administrator'],
+        botPermissions: ['Administrator'],
+        deleted: false
+    },
+
+    run: async ({ interaction, client, handler }) => {
         const { options, guild } = interaction;
         const sub = options.getSubcommand();
         var channel = options.getChannel('channel');

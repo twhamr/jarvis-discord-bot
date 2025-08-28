@@ -1,31 +1,23 @@
-const { Client, Interaction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
 const { createCanvas } = require('canvas');
 const { readData } = require('../../handlers/fileHandler');
 
 module.exports = {
-    name: 'typing-speedtest',
-    description: 'Run a typing speed test!',
-    options: [
-        {
-            name: 'words',
-            description: 'How many words do you want in your test?',
-            type: ApplicationCommandOptionType.Integer,
-            required: true,
-            min_value: 10,
-            max_value: 25
-        }
-    ],
-    // choices: Function,
-    // rolesRequired: Array[],
-    // permissionsRequired: Array[],
-    // botPermissions: Array[],
+    data: new SlashCommandBuilder()
+    .setName('wpm')
+    .setDescription('Find out your WPM!')
+    .addIntegerOption(
+        (option) => option.setName('words').setDescription('How many words do you want in your test?').setMinValue(10).setMaxValue(25).setRequired(true)
+    ),
     
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Interaction} interaction 
-     */
-    callback: async (client, interaction) => {
+    options: {
+        // devOnly: true,
+        // userPermissions: [],
+        // botPermissions: [],
+        deleted: false
+    },
+
+    run: async ({ interaction, client, handler }) => {
         const { options } = interaction;
         const wordCount = options.getInteger('words');
 

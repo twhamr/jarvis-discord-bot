@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
-const eventHandler = require('./handlers/eventHandler');
+const { CommandKit } = require('commandkit');
+const { devGuildIds, devUserIds } = require('../config.json');
 
 const client = new Client({
     intents: [
@@ -18,12 +19,13 @@ const client = new Client({
     ]
 });
 
-if (process.env.DEV_ONLY.toLowerCase() === 'true') {
-    console.log('⚙️ Development mode is active.. Only refreshing commands for DEV server!');
-} else {
-    console.log('🚀 Development mode is inactive.. Commands are available globally!');
-}
-
-eventHandler(client);
+new CommandKit({
+    client,
+    devGuildIds: devGuildIds,
+    devUserIds: devUserIds,
+    eventsPath: `${__dirname}/events`,
+    commandsPath: `${__dirname}/commands`,
+    bulkRegister: true
+});
 
 client.login(process.env.BOT_TOKEN);

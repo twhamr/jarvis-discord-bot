@@ -1,9 +1,7 @@
-const { Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, MessageFlags } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, MessageFlags } = require('discord.js');
 const { fetchRecord } = require('../../handlers/cacheHandler');
 
-module.exports = async (client, args) => {
-    let [message] = args;
-
+module.exports = async (message, client, handler) => {
     if (message.partial) {
         await message.fetch();
     }

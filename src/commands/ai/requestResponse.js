@@ -1,31 +1,23 @@
 require('dotenv').config();
-const { Client, Interaction, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { postRequest } = require('../../functions/httpRequests');
 
 module.exports = {
-    name: 'jarvis',
-    description: 'Chat with JARVIS!',
-    options: [
-        {
-            name: 'message',
-            description: 'Your message to JARVIS.',
-            type: ApplicationCommandOptionType.String,
-            required: true
-        }
-    ],
-    // choices: Function,
-    rolesRequired: [
-        '1406450680184569897'
-    ],
-    // permissionsRequired: Array[],
-    // botPermissions: Array[],
+    data: new SlashCommandBuilder()
+    .setName('jarvis')
+    .setDescription('Chat with JARVIS!')
+    .addStringOption(
+        (option) => option.setName('message').setDescription('Your message to JARVIS.').setRequired(true)
+    ),
     
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Interaction} interaction 
-     */
-    callback: async (client, interaction) => {
+    options: {
+        // devOnly: true,
+        // userPermissions: [],
+        // botPermissions: [],
+        deleted: false
+    },
+
+    run: async ({ interaction, client, handler }) => {
         const { options } = interaction;
         const message = options.getString('message');
 

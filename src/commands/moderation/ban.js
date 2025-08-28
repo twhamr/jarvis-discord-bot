@@ -1,32 +1,24 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-    name: 'ban',
-    description: 'Bans a user from this server.',
-    options: [
-        {
-            name: 'target-user',
-            description: 'The user you want to ban.',
-            type: ApplicationCommandOptionType.Mentionable,
-            required: true
-        },
-        {
-            name: 'reason',
-            description: 'The reason you want to ban the user.',
-            type: ApplicationCommandOptionType.String
-        }
-    ],
-    // choices: Function,
-    // rolesRequired: Array[],
-    permissionsRequired: [PermissionFlagsBits.BanMembers],
-    botPermissions: [PermissionFlagsBits.BanMembers],
+    data: new SlashCommandBuilder()
+    .setName('ban')
+    .setDescription('Bans a user from this server.')
+    .addMentionableOption(
+        (option) => option.setName('target-user').setDescription('The user you want to ban.').setRequired(true)
+    )
+    .addStringOption(
+        (option) => option.setName('reason').setDescription('The reason you want to ban the user.')
+    ),
     
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Interaction} interaction 
-     */
-    callback: async (client, interaction) => {
+    options: {
+        // devOnly: true,
+        userPermissions: ['BanMembers'],
+        botPermissions: ['BanMembers'],
+        deleted: false
+    },
+    
+    run: async ({ interaction, client, handler }) => {
         const { options, guild } = interaction;
 
         const targetUserId = options.get('target-user').value;

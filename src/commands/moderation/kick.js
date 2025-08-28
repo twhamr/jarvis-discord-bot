@@ -1,32 +1,24 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-    name: 'kick',
-    description: 'Kicks a user from this server.',
-    options: [
-        {
-            name: 'target-user',
-            description: 'The user you want to kick.',
-            type: ApplicationCommandOptionType.Mentionable,
-            required: true
-        },
-        {
-            name: 'reason',
-            description: 'The reason you want to kick the user.',
-            type: ApplicationCommandOptionType.String
-        }
-    ],
-    // choices: Function,
-    // rolesRequired: Array[],
-    permissionsRequired: [PermissionFlagsBits.KickMembers],
-    botPermissions: [PermissionFlagsBits.KickMembers],
+    data: new SlashCommandBuilder()
+    .setName('kick')
+    .setDescription('Kicks a user from this server.')
+    .addMentionableOption(
+        (option) => option.setName('target-user').setDescription('The user you want to kick.').setRequired(true)
+    )
+    .addStringOption(
+        (option) => option.setName('reason').setDescription('The reason you want to kick the user,')
+    ),
     
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Interaction} interaction 
-     */
-    callback: async (client, interaction) => {
+    options: {
+        // devOnly: true,
+        userPermissions: ['KickMembers'],
+        botPermissions: ['KickMembers'],
+        deleted: false
+    },
+
+    run: async ({ interaction, client, handler }) => {
         const { options, guild } = interaction;
 
         const targetUserId = options.get('target-user').value;

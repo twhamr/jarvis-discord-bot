@@ -1,71 +1,49 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const { fetchRecord, createRecord, deleteRecord } = require('../../handlers/cacheHandler');
 
 module.exports = {
-    name: 'reaction-roles',
-    description: 'Manage your reaction roles system.',
-    options: [
-        {
-            name: 'add',
-            description: 'Add a new reaction role.',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-                {
-                    name: 'message-id',
-                    description: 'The message to react to.',
-                    type: ApplicationCommandOptionType.String,
-                    required: true
-                },
-                {
-                    name: 'emoji',
-                    description: 'The emoji to react with.',
-                    type: ApplicationCommandOptionType.String,
-                    required: true
-                },
-                {
-                    name: 'role',
-                    description: 'The role to give',
-                    type: ApplicationCommandOptionType.Role,
-                    required: true
-                }
-            ]
-        },
-        {
-            name: 'remove',
-            description: 'Remove a reaction role.',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-                {
-                    name: 'message-id',
-                    description: 'The message to react to.',
-                    type: ApplicationCommandOptionType.String,
-                    required: true
-                },
-                {
-                    name: 'emoji',
-                    description: 'The emoji to react to.',
-                    type: ApplicationCommandOptionType.String,
-                    required: true
-                }
-            ]
-        }
-    ],
-    // choices: Function,
-    // rolesRequired: Array[],
-    permissionsRequired: [PermissionFlagsBits.Administrator],
-    botPermissions: [PermissionFlagsBits.Administrator],
+    data: new SlashCommandBuilder()
+    .setName('reaction-roles')
+    .setDescription('Manage your reaction roles system.')
+    .addSubcommand(
+        (command) => command
+                     .setName('add')
+                     .setDescription('Add a new reaction role.')
+                     .addStringOption(
+                        (option) => option.setName('message-id').setDescription('The message to react to.').setRequired(true)
+                     )
+                     .addStringOption(
+                        (option) => option.setName('emoji').setDescription('The emoji to react with.').setRequired(true)
+                     )
+                     .addRoleOption(
+                        (option) => option.setName('role').setDescription('The role to assign.').setRequired(true)
+                     )
+    )
+    .addSubcommand(
+        (command) => command
+                     .setName('remove')
+                     .setDescription('Remove an existing reaction role.')
+                     .addStringOption(
+                        (option) => option.setName('message-id').setDescription('The message to react to.').setRequired(true)
+                     )
+                     .addStringOption(
+                        (option) => option.setName('emoji').setDescription('The emoji to react with.').setRequired(true)
+                     )
+    ),
     
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Interaction} interaction 
-     */
-    callback: async (client, interaction) => {
+    options: {
+        // devOnly: true,
+        userPermissions: ['Administrator'],
+        botPermissions: ['Administrator'],
+        deleted: false
+    },
+    
+    run: async ({ interaction, client, handler }) => {
         const { options, guild, channel } = interaction;
         const sub = options.getSubcommand();
         const emoji = options.getString('emoji');
         
-        const cacheFile = 'reactionRoles.json'
+        const cacheFile = 'reactionRoles.json';
 
         try {
             const message = await channel.messages.fetch(options.getString('message-id'));

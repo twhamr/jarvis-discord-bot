@@ -52,7 +52,7 @@ module.exports = {
             const applicationCommands = await getApplicationCommands(client);
 
             const targetCommand = applicationCommands.cache.find(
-                (cmd) => cmd.name === interaction.commandName
+                (cmd) => cmd.name === command
             );
             if (!targetCommand) return;
 
@@ -110,17 +110,21 @@ module.exports = {
         }
     },
 
-    autocomplete: ({ interaction, client, handler }) => {
+    autocomplete: async ({ interaction, client, handler }) => {
         const focusedCMDOption = interaction.options.getFocused(true);
 
-        const applicationCommands = getApplicationCommands(client);
-
-        const filteredChoices = applicationCommands.cache.filter((cmd) => cmd.name.startsWith(focusedCMDOption));
+        const applicationCommands = await getApplicationCommands(client);
+        
+        const commandsArray = applicationCommands.cache.map(
+            (cmd) => [cmd.name]
+        );
+        
+        const filteredChoices = commandsArray.flat(Infinity).filter((cmd) => cmd.startsWith(focusedCMDOption.value));
 
         const results = filteredChoices.map((cmd) => {
             return {
-                name: cmd.name,
-                value: cmd.name
+                name: cmd,
+                value: cmd
             };
         });
 

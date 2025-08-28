@@ -1,0 +1,4 @@
+{
+    "devGuildIds": ["SERVER_IDs"],
+    "devUserIds": ["USER_IDs"]
+}

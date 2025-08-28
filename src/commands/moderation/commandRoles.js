@@ -11,7 +11,7 @@ module.exports = {
                      .setName('add')
                      .setDescription('Add a role to a command.')
                      .addStringOption(
-                        (option) => option.setName('command').setDescription('The command to add a role to.').setRequired(true)
+                        (option) => option.setName('command').setDescription('The command to add a role to.').setRequired(true).setAutocomplete(true)
                      )
                      .addRoleOption(
                         (option) => option.setName('role').setDescription('The role required to run command.').setRequired(true)
@@ -22,7 +22,7 @@ module.exports = {
                      .setName('remove')
                      .setDescription('Remove a role from a command.')
                      .addStringOption(
-                        (option) => option.setName('command').setDescription('The command to remove a role from.').setRequired(true)
+                        (option) => option.setName('command').setDescription('The command to remove a role from.').setRequired(true).setAutocomplete(true)
                      )
     )
     .addSubcommand(
@@ -30,7 +30,7 @@ module.exports = {
                      .setName('fetch')
                      .setDescription('Fetch the role required for a command.')
                      .addStringOption(
-                        (option) => option.setName('command').setDescription('The command to fetch.').setRequired(true)
+                        (option) => option.setName('command').setDescription('The command to fetch.').setRequired(true).setAutocomplete(true)
                      )
     ),
 
@@ -108,5 +108,22 @@ module.exports = {
         } catch (error) {
             await sendMessage(`❌ Unable to manage command roles: ${error}`);
         }
+    },
+
+    autocomplete: ({ interaction, client, handler }) => {
+        const focusedCMDOption = interaction.options.getFocused(true);
+
+        const applicationCommands = getApplicationCommands(client);
+
+        const filteredChoices = applicationCommands.cache.filter((cmd) => cmd.name.startsWith(focusedCMDOption));
+
+        const results = filteredChoices.map((cmd) => {
+            return {
+                name: cmd.name,
+                value: cmd.name
+            };
+        });
+
+        interaction.respond(results.slice(0, 25));
     }
 };
